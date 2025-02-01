@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SkillPanelManager : MonoBehaviour
 {
-    // Assign your Skill Panel GameObject (the UI panel that pops up) in the Inspector.
+    // Assign Skill Panel GameObject in the Inspector.
     public GameObject skillPanel;
     
     // Assign the player's movement/camera controller script (or any component that handles player input)
@@ -20,12 +20,12 @@ public class SkillPanelManager : MonoBehaviour
         }
     }
 
-    // Toggles the skill panel's visibility and disables/enables player controls.
+    // Toggles the skill panels visibility and disables/enabes player control.
     private void ToggleSkillPanel()
     {
         isPanelActive = !isPanelActive;
 
-        // Activate or deactivate the skill panel.
+        // Activate or deactivate the skill panel based on the toggle state.
         if (skillPanel != null)
         {
             skillPanel.SetActive(isPanelActive);

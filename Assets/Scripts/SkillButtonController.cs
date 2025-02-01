@@ -4,22 +4,30 @@ using TMPro;
 
 public class SkillButtonController : MonoBehaviour
 {
-    // The TMP_Text that displays the skill name.
+    // UI elements in the button prefab.
     public TMP_Text skillNameText;
-    
-    // The Button component.
     public Button button;
 
-    // Setup method that assigns the given text (profession name) to the TMP_Text.
-    public void Setup(string text)
+    // Holds the data for the skill this button represents.
+    private Skill skillData;
+
+    // Call this method to initialize the button with a Skill.
+    public void Setup(Skill skill)
     {
+        skillData = skill;
         if (skillNameText != null)
         {
-            skillNameText.text = text;
+            skillNameText.text = skill.skillName;
         }
-        else
-        {
-            Debug.LogError("TMP_Text component not assigned in SkillButtonController.");
-        }
+        // Remove any previous listeners and add our own.
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnButtonClicked);
+    }
+
+    // Called when the button is clicked.
+    void OnButtonClicked()
+    {
+        Debug.Log("Skill selected: " + skillData.skillName);
+        // You can add additional logic here to display details, unlock the skill, etc.
     }
 }

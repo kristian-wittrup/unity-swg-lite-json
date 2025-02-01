@@ -1,16 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ProfessionManager : MonoBehaviour
 {
-    // Option 1: Assign the JSON file via the Inspector.
     public TextAsset medicSkillDataJson;
-
-    // This will hold our loaded Medic profession data.
     private ProfessionData medicProfession;
 
     void Awake()
     {
-        // If not assigned in the Inspector, try to load it from Resources.
+        // If the JSON file isn't manually assigned, try to load it from the Resources folder.
         if (medicSkillDataJson == null)
         {
             medicSkillDataJson = Resources.Load<TextAsset>("MedicSkillData");
@@ -18,9 +16,32 @@ public class ProfessionManager : MonoBehaviour
 
         if (medicSkillDataJson != null)
         {
-            // Parse the JSON into our ProfessionData class.
+            // Parse the JSON into our ProfessionData object.
             medicProfession = JsonUtility.FromJson<ProfessionData>(medicSkillDataJson.text);
-            Debug.Log("Loaded Profession: " + medicProfession.professionName);
+            
+            if (medicProfession == null)
+            {
+                Debug.LogError("medicProfession is null!");
+            }
+            else
+            {
+                Debug.Log("Loaded Profession Name: " + medicProfession.professionName);
+            }
+
+            if (medicProfession != null && medicProfession.skillGrid == null)
+            {
+                Debug.LogError("skillGrid is null!");
+            }
+            else if (medicProfession != null && medicProfession.skillGrid != null)
+            {
+                Debug.Log("SkillGrid column count: " + medicProfession.skillGrid.Count);
+
+                // Log the number of skills in each column.
+                for (int i = 0; i < medicProfession.skillGrid.Count; i++)
+                {
+                    Debug.Log("Column " + i + " has " + medicProfession.skillGrid[i].Count + " skills.");
+                }
+            }
         }
         else
         {
@@ -28,7 +49,6 @@ public class ProfessionManager : MonoBehaviour
         }
     }
 
-    // Public method to access the Medic Profession data.
     public ProfessionData GetMedicProfession()
     {
         return medicProfession;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class ProfessionManager : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class ProfessionManager : MonoBehaviour
         if (medicSkillDataJson != null)
         {
             // Parse the JSON into our ProfessionData object.
-            medicProfession = JsonUtility.FromJson<ProfessionData>(medicSkillDataJson.text);
+            medicProfession = JsonConvert.DeserializeObject<ProfessionData>(medicSkillDataJson.text);
+            //medicProfession = JsonUtility.FromJson<ProfessionData>(medicSkillDataJson.text);
             
             if (medicProfession == null)
             {
@@ -28,7 +30,7 @@ public class ProfessionManager : MonoBehaviour
                 Debug.Log("Loaded Profession Name: " + medicProfession.professionName);
             }
 
-            if (medicProfession != null && medicProfession.skillGrid != null)
+            if (medicProfession != null && medicProfession.skillGrid == null)
             {
                 Debug.LogError("skillGrid is null!");
             }

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Medic
   m_EditorClassIdentifier: 
   professionName: Medic
+  skillTrees:
+  - {fileID: 11400000, guid: a7f293484c42c9b46a520521bd480018, type: 2}

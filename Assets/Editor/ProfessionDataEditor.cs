@@ -11,14 +11,48 @@ public class ProfessionDataEditor : Editor
 
         professionData.professionName = EditorGUILayout.TextField("Profession Name", professionData.professionName);
 
-        if (professionData.skillGrid == null)
+        if (professionData.skillTrees == null)
+        //if (professionData.skillGrid == null)
         {
-            professionData.skillGrid = new List<List<Skill>>();
+            professionData.skillTrees = new List<SkillTreeData>();
+            //professionData.skillGrid = new List<List<Skill>>();
+        }
+        EditorGUILayout.LabelField("Skill Trees");
+        //EditorGUILayout.LabelField("Skill Grid");
+
+        // refactored to use SkillTreeData
+        for (int i = 0; i < professionData.skillTrees.Count; i++)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Skill Tree " + (i + 1), GUILayout.Width(100));
+
+            professionData.skillTrees[i] = (SkillTreeData)EditorGUILayout.ObjectField(professionData.skillTrees[i], typeof(SkillTreeData), false);
+
+            if (GUILayout.Button("Remove Skill Tree", GUILayout.Width(150)))
+            {
+                professionData.skillTrees.RemoveAt(i);
+                EditorUtility.SetDirty(professionData);
+                AssetDatabase.SaveAssets();
+                break;
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
-        EditorGUILayout.LabelField("Skill Grid");
+        if (GUILayout.Button("Add Skill Tree"))
+        {
+            professionData.skillTrees.Add(null);
+            EditorUtility.SetDirty(professionData);
+            AssetDatabase.SaveAssets();
+        }
 
-        for (int i = 0; i < professionData.skillGrid.Count; i++)
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(professionData);
+            AssetDatabase.SaveAssets();
+        }
+
+        /* for (int i = 0; i < professionData.skillGrid.Count; i++)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Column " + (i + 1), GUILayout.Width(100));
@@ -65,6 +99,6 @@ public class ProfessionDataEditor : Editor
         {
             EditorUtility.SetDirty(professionData);
             AssetDatabase.SaveAssets();
-        }
+        } */
     }
 }

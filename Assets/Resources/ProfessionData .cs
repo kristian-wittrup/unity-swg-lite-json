@@ -5,5 +5,6 @@ using System.Collections.Generic;
 public class ProfessionData : ScriptableObject
 {
     public string professionName;
-    public List<List<Skill>> skillGrid;
+    public List<SkillTreeData> skillTrees;
+    // public List<List<Skill>> skillGrid;
 }

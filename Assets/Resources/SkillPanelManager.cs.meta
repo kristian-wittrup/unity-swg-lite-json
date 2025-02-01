@@ -9,7 +9,7 @@ MonoImporter:
   - professionListContainer: {instanceID: 0}
   - skillGridContainer: {instanceID: 0}
   - professionButtonPrefab: {instanceID: 0}
-  - skillButtonPrefab: {fileID: 1670242055342035601, guid: 66e0c57b25f22b849908dae579ea882b, type: 3}
+  - skillButtonPrefab: {instanceID: 0}
   - professionTitle: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}

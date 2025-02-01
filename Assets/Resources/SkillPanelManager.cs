@@ -18,8 +18,9 @@ public class SkillPanelManager : MonoBehaviour
 
     void Start()
     {
-        // Load all ProfessionData ScriptableObjects
-        professions = new List<ProfessionData>(Resources.LoadAll<ProfessionData>(""));
+        // Load all ProfessionData ScriptableObjects from the specified path
+        professions = new List<ProfessionData>(Resources.LoadAll<ProfessionData>("ScriptableObjects"));
+        Debug.Log("Loaded " + professions.Count + " professions.");
 
         // Create profession buttons
         foreach (var profession in professions)
@@ -27,6 +28,7 @@ public class SkillPanelManager : MonoBehaviour
             Button button = Instantiate(professionButtonPrefab, professionListContainer);
             button.GetComponentInChildren<TMP_Text>().text = profession.professionName;
             button.onClick.AddListener(() => OnProfessionButtonClicked(profession));
+            Debug.Log("Created button for profession: " + profession.professionName);
         }
     }
 
@@ -59,10 +61,11 @@ public class SkillPanelManager : MonoBehaviour
     void OnProfessionButtonClicked(ProfessionData profession)
     {
         professionTitle.text = profession.professionName;
-        PopulateSkillGrid(profession.skillGrid);
+        Debug.Log("Selected profession: " + profession.professionName);
+        PopulateSkillGrid(profession.skillTrees);
     }
 
-    void PopulateSkillGrid(List<List<Skill>> skillGrid)
+    void PopulateSkillGrid(List<SkillTreeData> skillTrees)
     {
         // Clear existing skill buttons
         foreach (Transform child in skillGridContainer)
@@ -71,13 +74,13 @@ public class SkillPanelManager : MonoBehaviour
         }
 
         // Create new skill buttons
-        for (int i = 0; i < skillGrid.Count; i++)
+        foreach (var skillTree in skillTrees)
         {
-            for (int j = 0; j < skillGrid[i].Count; j++)
+            foreach (var skill in skillTree.skills)
             {
-                Skill skill = skillGrid[i][j];
                 Button button = Instantiate(skillButtonPrefab, skillGridContainer);
                 button.GetComponentInChildren<TMP_Text>().text = skill.skillName;
+                Debug.Log("Created button for skill: " + skill.skillName);
                 // Add additional logic to handle skill button clicks if needed
             }
         }

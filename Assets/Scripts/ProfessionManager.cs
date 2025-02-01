@@ -28,7 +28,7 @@ public class ProfessionManager : MonoBehaviour
                 Debug.Log("Loaded Profession Name: " + medicProfession.professionName);
             }
 
-            if (medicProfession != null && medicProfession.skillGrid == null)
+            if (medicProfession != null && medicProfession.skillGrid != null)
             {
                 Debug.LogError("skillGrid is null!");
             }

@@ -19,7 +19,7 @@ public class ProfessionManager : MonoBehaviour
         {
             // Parse the JSON into our ProfessionData object.
             medicProfession = JsonConvert.DeserializeObject<ProfessionData>(medicSkillDataJson.text);
-            //medicProfession = JsonUtility.FromJson<ProfessionData>(medicSkillDataJson.text);
+            //medicProfession = JsonUtility.FromJson<ProfessionData>(medicSkillDataJson.text); - stupid error, JsonUtility does not support nested arrays, what a waste of time :D
             
             if (medicProfession == null)
             {

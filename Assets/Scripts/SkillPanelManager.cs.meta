@@ -1,2 +1,18 @@
 fileFormatVersion: 2
 guid: faa4ed6e599316d48baa4de5b093cbf2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - skillPanel: {instanceID: 0}
+  - playerController: {instanceID: 0}
+  - professionListContainer: {instanceID: 0}
+  - skillGridContainer: {instanceID: 0}
+  - professionButtonPrefab: {instanceID: 0}
+  - skillButtonPrefab: {fileID: 1670242055342035601, guid: 66e0c57b25f22b849908dae579ea882b, type: 3}
+  - professionTitle: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

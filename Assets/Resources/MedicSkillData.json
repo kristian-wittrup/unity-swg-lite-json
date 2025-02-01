@@ -1,0 +1,342 @@
+{
+    "professionName": "Medic",
+    "skillGrid": [
+      [
+        {
+          "skillID": "Medic_HealSelf_Novice",
+          "skillName": "Heal Self Novice",
+          "description": "Basic self-healing abilities.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 5
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "SelfHeal_Small",
+              "abilityName": "Small Self-Heal",
+              "description": "Recovers a small amount of health."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealSelf_Apprentice",
+          "skillName": "Heal Self Apprentice",
+          "description": "Improved self-healing techniques that boost recovery and reduce heal costs.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 15
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "SelfHeal_Medium",
+              "abilityName": "Medium Self-Heal",
+              "description": "Recovers a moderate amount of health."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealSelf_Adept",
+          "skillName": "Heal Self Adept",
+          "description": "Advanced self-healing capabilities that further boost recovery and cost efficiency.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 25
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 15
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "SelfHeal_Large",
+              "abilityName": "Large Self-Heal",
+              "description": "Recovers a large amount of health quickly."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealSelf_Master",
+          "skillName": "Heal Self Master",
+          "description": "Master-level self-healing that maximizes recovery and minimizes resource costs.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 40
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 20
+            },
+            {
+              "statType": "CriticalHealChance",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "SelfHeal_Quick",
+              "abilityName": "Quick Self-Heal",
+              "description": "A rapid self-heal ability with reduced cooldown."
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "skillID": "Medic_HealOthers_Novice",
+          "skillName": "Heal Others Novice",
+          "description": "Basic healing techniques for treating allies.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 5
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "HealOthers_Small",
+              "abilityName": "Small Heal Others",
+              "description": "Heals a minor amount of health for an ally."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealOthers_Apprentice",
+          "skillName": "Heal Others Apprentice",
+          "description": "Improved healing techniques for allies that also reduce the cost of healing.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 15
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "HealOthers_Medium",
+              "abilityName": "Medium Heal Others",
+              "description": "Heals a moderate amount of health for an ally."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealOthers_Adept",
+          "skillName": "Heal Others Adept",
+          "description": "Advanced techniques for healing allies effectively and efficiently.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 25
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 15
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "HealOthers_Large",
+              "abilityName": "Large Heal Others",
+              "description": "Heals a large amount of health for an ally."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_HealOthers_Master",
+          "skillName": "Heal Others Master",
+          "description": "Masterful healing techniques that maximize ally recovery and efficiency.",
+          "grantedStats": [
+            {
+              "statType": "HealingEffectiveness",
+              "value": 40
+            },
+            {
+              "statType": "HealCostReduction",
+              "value": 20
+            },
+            {
+              "statType": "CriticalHealChance",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "HealOthers_Quick",
+              "abilityName": "Quick Heal Others",
+              "description": "A rapid heal for allies with reduced cooldown."
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "skillID": "Medic_MedicalUse_Novice",
+          "skillName": "Medical Use Novice",
+          "description": "Basic proficiency in using medical tools and equipment.",
+          "grantedStats": [
+            {
+              "statType": "ToolEfficiency",
+              "value": 5
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "BasicDiagnosis",
+              "abilityName": "Basic Diagnosis",
+              "description": "Quickly assess minor injuries."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalUse_Apprentice",
+          "skillName": "Medical Use Apprentice",
+          "description": "Improved proficiency with medical tools for better patient care.",
+          "grantedStats": [
+            {
+              "statType": "ToolEfficiency",
+              "value": 15
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "IntermediateDiagnosis",
+              "abilityName": "Intermediate Diagnosis",
+              "description": "Assess injuries with moderate accuracy."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalUse_Adept",
+          "skillName": "Medical Use Adept",
+          "description": "Advanced use of medical equipment to improve treatment speed and accuracy.",
+          "grantedStats": [
+            {
+              "statType": "ToolEfficiency",
+              "value": 25
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "AdvancedDiagnosis",
+              "abilityName": "Advanced Diagnosis",
+              "description": "Assess injuries with high accuracy."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalUse_Master",
+          "skillName": "Medical Use Master",
+          "description": "Expert use of all medical equipment, enhancing diagnosis and treatment.",
+          "grantedStats": [
+            {
+              "statType": "ToolEfficiency",
+              "value": 40
+            },
+            {
+              "statType": "CriticalHealChance",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "ExpertDiagnosis",
+              "abilityName": "Expert Diagnosis",
+              "description": "Instantly assess injuries with expert precision."
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "skillID": "Medic_MedicalCrafting_Novice",
+          "skillName": "Medical Crafting Novice",
+          "description": "Basic crafting of essential medical items.",
+          "grantedStats": [
+            {
+              "statType": "CraftingSpeed",
+              "value": 5
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "SimpleBandages",
+              "abilityName": "Simple Bandages",
+              "description": "Craft basic bandages quickly."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalCrafting_Apprentice",
+          "skillName": "Medical Crafting Apprentice",
+          "description": "Improved crafting techniques for more effective medical items.",
+          "grantedStats": [
+            {
+              "statType": "CraftingSpeed",
+              "value": 15
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "AdvancedBandages",
+              "abilityName": "Advanced Bandages",
+              "description": "Craft better bandages more efficiently."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalCrafting_Adept",
+          "skillName": "Medical Crafting Adept",
+          "description": "Advanced medical item crafting to create superior medical kits.",
+          "grantedStats": [
+            {
+              "statType": "CraftingSpeed",
+              "value": 25
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "MedicalKitAssembly",
+              "abilityName": "Medical Kit Assembly",
+              "description": "Craft a complete medical kit faster."
+            }
+          ]
+        },
+        {
+          "skillID": "Medic_MedicalCrafting_Master",
+          "skillName": "Medical Crafting Master",
+          "description": "Masterful crafting that maximizes efficiency and resource use.",
+          "grantedStats": [
+            {
+              "statType": "CraftingSpeed",
+              "value": 40
+            },
+            {
+              "statType": "ResourceEfficiency",
+              "value": 10
+            }
+          ],
+          "grantedAbilities": [
+            {
+              "abilityID": "RapidMedicalCraft",
+              "abilityName": "Rapid Medical Craft",
+              "description": "Significantly reduce crafting time for all medical items."
+            }
+          ]
+        }
+      ]
+    ]
+  }
+  

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 81279a9b57171164baad6eda9bc1c18c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - skillGridParent: {instanceID: 0}
+  - skillButtonPrefab: {fileID: 8001827258112098287, guid: 7318692fe9a01174d95c3a88d5d05de6, type: 3}
+  - professionManager: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

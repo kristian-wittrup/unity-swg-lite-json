@@ -1,0 +1,32 @@
+.ui_left {
+    flex-grow: 1;
+    height: 100%;
+    width: 20%;
+}
+
+.ui_right {
+    flex-grow: 1;
+    background-size: 100% 100%;
+    height: 100%;
+    width: 80%;
+}
+
+.sp_ui_base {
+    flex-grow: 1;
+    flex-direction: row;
+    -unity-background-image-tint-color: rgba(89, 89, 89, 0.84);
+    background-color: rgba(103, 103, 103, 0.84);
+    background-size: 95% 95%;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-left-color: rgb(16, 88, 255);
+    border-right-color: rgb(16, 88, 255);
+    border-top-color: rgb(16, 88, 255);
+    border-bottom-color: rgb(16, 88, 255);
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transform-origin: left top;
+    
+}

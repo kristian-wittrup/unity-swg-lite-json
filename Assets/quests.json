@@ -1,0 +1,10 @@
+[
+    {
+        "questTitle": "Find the Lost Sword",
+        "questDescription": "Retrieve the lost sword from the cave.",
+        "questGiver": "Old Man",
+        "objectives": ["Go to the cave", "Find the sword"],
+        "rewardItem": "Sword of Destiny",
+        "questCompleter": "Return to the Old Man"
+    }
+]

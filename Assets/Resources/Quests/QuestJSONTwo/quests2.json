@@ -1,0 +1,26 @@
+[
+     {
+        "questTitle": "Retrieve the Ancient Artifact",
+        "questDescription": "Find and retrieve the ancient artifact from the ruins.",
+        "questGiver": "Young Man",
+        "objectives": ["Go to the ruins", "Find the artifact"],
+        "rewardItem": "Artifact of Power",
+        "questCompleter": "Return to the Young Man"
+    },
+    {
+        "questTitle": "Rescue the Villagers",
+        "questDescription": "Rescue the villagers captured by bandits.",
+        "questGiver": "Village Chief",
+        "objectives": ["Find the bandit camp", "Rescue the villagers"],
+        "rewardItem": "Hero's Medal",
+        "questCompleter": "Return to the Village Chief"
+    },
+    {
+        "questTitle": "Defeat the Dragon",
+        "questDescription": "Defeat the dragon terrorizing the kingdom.",
+        "questGiver": "King",
+        "objectives": ["Find the dragon's lair", "Defeat the dragon"],
+        "rewardItem": "Dragon Slayer Sword",
+        "questCompleter": "Return to the King"
+    }
+]

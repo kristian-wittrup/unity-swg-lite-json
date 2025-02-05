@@ -1,0 +1,1450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="keywords" content="SWG, SWGEMU, star wars, damage, calculator"/>
+<title>SWGEMU Damage Calculator - Somebody other then me made it</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="/web/20190103003750js_/http://www.swgcalc.x10.mx/jquery-latest.js"></script> -->
+<script type="text/javascript" src="tablesorter.js"></script>
+<script language="JavaScript">
+//set the initial table set
+
+//jsort init
+$(document).ready(function()
+    {
+        $("#dataTable").tablesorter();
+		document.getElementById('TextUnarmedBonus1').disabled= true;
+		disablePSG();		
+		populate();
+    }
+);
+
+
+function disablePSG(){
+	document.getElementById('textShieldEnergy').disabled= true;
+	document.getElementById('textShieldElectricity').disabled= true;
+	document.getElementById('textShieldStun').disabled= true;
+	document.getElementById('textShieldHeat').disabled= true;
+	document.getElementById('textShieldCold').disabled= true;
+	
+	document.getElementById('selectionMitigation').disabled= true;
+}
+
+
+function enablePSG(){
+	document.getElementById('textShieldEnergy').disabled= false;
+	document.getElementById('textShieldElectricity').disabled= false;
+	document.getElementById('textShieldStun').disabled= false;
+	document.getElementById('textShieldHeat').disabled= false;
+	document.getElementById('textShieldCold').disabled= false;
+	
+	document.getElementById('selectionMitigation').disabled= false;
+}
+
+
+function populate(){
+
+                for(i=0;i<weapons.length;i++){
+                    var select = document.getElementById("selectionWeapons1");
+                    select.options[select.options.length] = new Option(weapons[i][0]);
+                }
+				
+				for(i=0;i<enemies.length;i++){
+                    var select = document.getElementById("selectionEnemies");
+                    select.options[select.options.length] = new Option(enemies[i][0]);
+                }
+
+}
+
+// set the data arrays
+// weapon, speed, min, max, type, ap, profession
+// 0 kinetic, 1 energy, 2 elec, 3 stun, 4 blast, 5 heat, 6 cold, 7 acid
+// 0 none, 1 light, 2 medium, 3 heavy
+// 0 bh, 1 carbineer, 2 commando, 3 fencer, 4 pikeman, 5 pistoleer, 6 rifleman, 7 swordsman, 8 tkm
+
+
+// name speed min max damagetype ap class
+weapons = new Array (
+	new Array ("Preloaded Weapons", 0, 0, 0, 0, 0,0),
+	new Array ("Laser Carbine", 3.9, 86, 436, 1, 2,1),
+	new Array ("Power Hammer", 5.2, 196, 659, 4, 2, 7),
+	new Array ("Long Vibro Axe", 4.2, 136, 526, 0, 2, 4 ),
+	new Array ("T21", 8.2, 199, 467, 1, 3, 6),
+	new Array ("Republic Blaster", 2.2, 87, 312, 1, 1, 5),
+	new Array ("Curved Sword", 2.9, 185, 375, 0, 0, 3),
+	new Array ("Flame Thrower", 3.4, 474, 912, 5, 0, 2),
+	new Array ("Light Lightning Cannon", 3.2, 437, 834, 2, 1, 0),
+	new Array ("DXR6 Carbine", 4.1, 179, 320, 7, 1, 1),
+	new Array ("Vibro Knuckler", 2.2, 47, 216, 0, 1, 8),
+	new Array ("Scatter Pistol", 2.3, 158, 287, 7, 1, 5),
+	new Array ("Stun Baton", 2.5, 143, 240, 3, 0, 3),
+	new Array ("Jawa Ion Rifle", 4, 120, 313, 3, 1, 6),
+	new Array ("Geo Sonic Blaster", 2, 132, 274, 3, 0, 5),
+	new Array ("Vibro Lance", 3.5, 105, 415, 2, 1, 4)
+
+);
+
+
+
+specials = new Array(
+// special name, damage mod, delay mod, description, dot multiplier, pool
+//pool: 0=random, 1=health, 2= action, 3=mind
+// specials [0][x][x] BH
+new Array(
+	new Array("LLC Single 1", 3.00, 2.00, "16m range.", 0, 0),
+	new Array("LLC Single 2", 5.00, 2.00, "16m range.", 0, 0),
+	new Array("LLC Cone 1", 3.00, 2.00, "Cone, 16m range.", 0, 0),
+	new Array("LLC Cone 2", 4.00, 2.00, "Cone, 16m range.", 0, 0),
+	new Array("MM: Point Blank Area 1", 2, 1.5, "Cone, 12m Range.", 0, 0),
+	new Array("MM: Point Blank Single 1", 2, 1.5, "Single, 12m Range.", 0, 0),
+	new Array("MM: Overcharge Shot 1", 2.75, 1.25, "Weapon Decay.", 0, 0),
+	new Array("MM: Overcharge Shot 2", 3.75, 2.00, "Weapon Decay.", 0, 0),
+	new Array("MM: Suppression fire 1", 1.5, 1.5, "Posture down.", 0, 0),
+	new Array("MM: Threaten Shot", 0.25, 2, "Chance for enemy to flee.", 0, 0),
+	new Array("MM: Warning Shot", 0.25, 2, "Keep enemy at range.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [1][x][x] Carbineer
+new Array(
+	
+	new Array("Action Shot 2", 2,  2, "Cone. Action Pool. DoT.", 1, 2),
+	new Array( "Burst Shot 1",4,  2, "Single Target.", 0, 0),
+	new Array("Burst Shot 2",4,  2, "Cone. High Damage.", 0, 0),
+	new Array("Charge Shot 1",2,  2, "Knockdown.", 0, 0),
+	new Array("Charge Shot 2",2.5,2, "Knockdown.", 0, 0),
+	new Array( "Full Auto Area 1",1.5,  1.5, "Cone. Stun. Dizzy. Blind.", 0, 0),
+	new Array( "Full Auto Area 2",2, 1.5, "Cone. Stun. Dizzy. Blind.", 0, 0),	
+	new Array( "Full Auto Single 2",3.5, 1.5, "Single.Stun. Dizzy. Blind.", 0, 0),	
+	new Array( "Leg Shot 3",2,  2,"Action Pool. Stun.", 0, 2),
+	new Array( "Crippling Shot",5,  2, "High Damage.", 0, 0),
+        new Array( "Scatter Shot 1",3.25,  2, "Hits 3 Random Pools.", 0, 4),
+	new Array( "Scatter Shot 2",5,  2, "Hits 3 Random Pools.", 0, 4),
+	new Array( "Wild Shot 1",2.25,  2, "Stun.", 0, 0),
+	new Array( "Wild Shot 2",3,  2, "Stun.", 0, 0),
+	new Array( "BH: Confusion Shot 1",  3,  2.3, "Stun. Dizzy.", 0, 0),
+	new Array( "BH: Fire Knockdown", 2.5,  2,"Knockdown. Dizzy.", 0, 0),
+	new Array( "BH: Spray Shot",  4,  3.5, "Blind. Dizzy. Stun.", 0, 0),
+	new Array( "BH: Underhand Shot", 3,  1.5, "Knockdown.", 0, 0),
+	new Array("MM: Action Shot 1",   1,  1.5, "Action Pool. DoT.", 1, 2),
+	new Array( "MM: Full Auto Single 1",2, 1.5, "Single.Stun. Dizzy. Blind", 0, 0),
+	new Array( "MM: Leg Shot 1",1,  2,"Action Pool.", 0, 2),
+	new Array( "MM: Leg Shot 2",2,  2,"Action Pool. Stun.", 0, 2),
+	new Array("MM: Overcharge Shot 1", 2.75, 1.25, "Weapon Decay.", 0, 0),
+	new Array("MM: Overcharge Shot 2", 3.75, 2.00, "Weapon Decay.", 0, 0),
+	new Array("MM: Point Blank Area 1", 2, 1.5, "Cone, 12m Range.", 0, 0),
+	new Array("MM: Point Blank Single 1", 2, 1.5, "Single, 12m Range.", 0, 0),
+	new Array("MM: Suppression fire 1", 1.5, 1.5, "Posture down.", 0, 0),
+	new Array("MM: Threaten Shot", 0.25, 2, "Chance for enemy to flee.", 0, 0),
+	new Array("MM: Warning Shot", 0.25, 2, "Keep enemy at range.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+
+// specials [2][x][x] Commando
+new Array(
+	new Array("Flame Single 1",5  , 4, "16m range.DoT", 0.1, 6),
+	new Array("Flame Single 2",8  , 4,"16m range.", 0.1, 6),
+	new Array("Flame Cone 1" , 5  , 4,"Cone, 16m range.", 0.1, 6),
+	new Array("Flame Cone 2" ,6  , 4,"Cone, 16m range.", 0.1, 6),
+	new Array("MM: Overcharge Shot 1", 2.75, 1.25, "Weapon Decay.", 0, 0),
+	new Array("MM: Overcharge Shot 2", 3.75, 2.00, "Weapon Decay.", 0, 0),
+	new Array("MM: Point Blank Area 1", 2, 1.5, "Cone, 12m Range.", 0, 0),
+	new Array("MM: Point Blank Single 1", 2, 1.5, "Single, 12m Range.", 0, 0),
+	new Array("MM: Suppression fire 1", 1.5, 1.5, "Posture down.", 0, 0),
+	new Array("MM: Threaten Shot", 0.25, 2, "Chance for enemy to flee.", 0, 0),
+	new Array("MM: Warning Shot", 0.25, 2, "Keep enemy at range.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [3][x][x] Fencer
+new Array(
+	new Array("Blind Hit 1",2,  1.5,"Blind.", 0, 0),
+	new Array("Blind Hit 2",2.5, 2.25,"Area. Blind.", 0, 0),
+	new Array("Body Hit 2",  2.5, 2, "Health pool.", 0, 1),
+	new Array("Body Hit 3",3.5, 2.25, "Health pool.", 0, 1),	
+	new Array("Dizzy Hit 2",3.5, 2.25,"Area. Dizzy.", 0, 0),
+	new Array("Health Hit 1",1.5, 1.5, "Health. DoT.", 1,1),
+	new Array("Health Hit 2",3,    2,  "Health. DoT.", 1, 1),	
+	new Array("Hit 2",3.5,  1.5, "Damage.", 0, 0),
+	new Array("Hit 3",5,    2.25, "Blind.", 0, 0),	
+	new Array("Scatter Hit 1",3,  1.5, "Hits 2-3 Random Pools.", 0, 4),
+	new Array("Scatter Hit 2",   4,  2.5, "Hits 2-3 Random Pools.", 0, 4),	
+	new Array("Spin Attack 2",3,  2.5, "Area. Blind.", 0, 0),
+	new Array("MB: Body Hit 1",1.5,   1.5, "Health pool.", 0, 1),
+	new Array("MB: Dizzy Hit 1", 2,  1.5, "Dizzy.", 0, 0),
+	new Array("MB: Hit 1", 2.5,  1.5,"Damage.", 0, 0),
+	new Array("MB: Lunge 1", 2,  1.5, "15m range. Posture Down.", 0, 0),
+	new Array("MB: Lunge 2",3,  2.5, "15m Range. Knockdown.", 0, 0),
+	new Array("MB: Spin Attack 1", 2, 1.5,"Area.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [4][x][x] Pikeman
+new Array(
+	new Array("Action Hit 1", 1,    1.5,"Action pool. DoT.", 1,2),
+	new Array("Action Hit 2",  2,    2,"Action pool. DoT.", 1, 2),
+	new Array("Area Attack 1",  2,   1.75,"Area.", 0, 0),
+	new Array("Area Attack 2",  2.75,    2.5,"Area. Stun. Dizzy", 0, 0),
+	new Array("Hit 2",  2.5,    2,"Stun.", 0, 0),
+	new Array("Hit 3", 4,    2.5,"Stun. Posture Down.", 0, 0),	
+	new Array("Leg Hit 2", 2,    1.75,"Action pool.", 0, 2),
+	new Array("Leg Hit 3",  2.5,   2.25,"Action pool.", 0, 2),	
+	new Array("Spin Attack 2",   2.5,   2.5,"Area. Dizzy.", 0, 0),	
+	new Array("Stun 2",   2,    2,"Area. Stun.", 0, 0),
+	new Array("Sweep 1",  2,    1.5,"Knockdown.", 0, 0),
+	new Array("Sweep 2",  2.5,    2.5,"Area. Knockdown.", 0, 0),
+	new Array("MB: Hit 1",   2,   1.5,"Damage.", 0, 0),
+	new Array("MB: Leg Hit 1", 1.5,    1.25,"Action pool.", 0, 2),
+	new Array("MB: Lunge 1",  1,    1.5,"15m range. Posture Down.", 0, 0),
+	new Array("MB: Lunge  2",  2,   2.5,"15m Range. Knockdown.", 0, 0),
+	new Array("MB: Spin Attack 1",  1.5,    1.5,"Area.", 0, 0),
+	new Array("MB: Stun 1",   1.5,   1.5,"Stun.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [5][x][x] Pistoleer
+new Array(
+	
+	
+	new Array("Body Shot 3" , 4 , 1 , "Health pool", 0, 1 ),
+	new Array("Disarming Shot 1" ,2 ,  1.5 , "Damages enemy weapon", 0, 0 ),
+	new Array("Disarming Shot 2" , 2.75 ,  2 , "Damages enemy weapon", 0, 0) ,	
+	new Array("Double Tap" , 3 ,  2 , "Extra damage", 0, 5) ,	
+	new Array("Fan Shot" ,4 ,  2 , "Cone", 0, 0 ),           	
+	new Array("Health Shot 2" , 3 ,  2 , "Health DoT.", 1,1 ),
+	new Array("MM: Kipup Shot" , 2.5 ,  1.5 , "To standing", 0, 0 ),	
+	new Array("Multitarget Shot" , 4 ,  2 , "Area 32m radius", 0, 0) ,	
+	new Array("Pistol Melee Defense 1" , 3 ,    2 , "Knockdown", 0, 0 ),
+	new Array("Pistol Melee Defense 2" , 4 ,    2 , "Knockdown", 0, 0 ),
+	new Array("Point Blank Area 2" ,4 ,  1.5 , "Cone 12m range.", 0, 0 ),
+	new Array("Point Blank Single 2", 3, 1.8, "Single, 10m Range.", 0, 0),	
+	new Array("Stopping Shot" , 5 ,  2.5 , "High damage", 0, 0) ,
+	
+	new Array("BH: Bleed Shot" , 2 ,  1.5 , "Mind pool DoT", 1, 3) ,
+	new Array("BH: Eye Shot" , 3 ,  2 , "Blind. Mind pool." , 0, 3),
+	new Array("BH: Fast Blast", 4.15, 3.05, "Health pool.", 0, 1),
+	new Array("BH: Torso Shot" ,    3 ,  2.3 , "Health DoT", 1, 1),
+	
+	new Array("S: Last Ditch" , 6 ,  4 , "High damage", 0, 0) ,
+	new Array("S: Low Blow" , 2 ,  2.5 , "Knockdown", 0, 0 ),
+	new Array("S: Panic Shot" , 2 ,  3 , "Cone Delays enemies", 0, 0) ,
+	
+	new Array("MM: Body Shot 1" ,2 ,  1 , "Health pool" , 0,1 ),
+	new Array("MM: Body Shot 2" ,3 ,  1 , "Health pool", 0, 1 ),
+	new Array("MM: Dive Shot" ,2.5 ,  1.5 , "To prone" , 0, 0),
+	new Array("MM: Health Shot 1" , 1.5 ,  2 , "Health DoT.", 1, 1 ),
+	new Array("MM: Overcharge Shot 1", 2.75, 1.25, "Weapon Decay.", 0, 0),
+	new Array("MM: Overcharge Shot 2", 3.75, 2.00, "Weapon Decay.", 0, 0),
+	new Array("MM: Point Blank Area 1", 2, 1.5, "Cone, 12m Range.", 0, 0),
+	new Array("MM: Point Blank Single 1", 2, 1.5, "Single, 12m Range.", 0, 0),
+	new Array("MM: Roll Shot" ,2.5 ,  1.5 , "To kneeling" , 0, 0),
+	new Array("MM: Suppression fire 1", 1.5, 1.5, "Posture down.", 0, 0),
+	new Array("MM: Threaten Shot", 0.25, 2, "Chance for enemy to flee.", 0, 0),
+	new Array("MM: Warning Shot", 0.25, 2, "Keep enemy at range.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [6][x][x] Rifleman
+new Array(
+	new Array("Conceal Shot", 2.5,   2, "Concealed.", 0, 0),
+	new Array("Flurry Shot 1", 2,   2, "Dizzy.", 0, 0),
+	new Array("Flurry Shot 2", 2.5,   2, "Cone. Dizzy.", 0, 0),
+	new Array("Flushing Shot 1",  2,   2, "Raise posture. Stun.", 0, 0),
+	new Array("Flushing Shot 2",  4,   2, "Raise posture. Stun.", 0, 0),	
+	new Array("Head Shot 3",      3,   2, "Mind pool.", 0, 3),	
+	new Array("Mind Shot 2", 2,   1.5, "Mind pool.DoT.", 1, 3),
+	new Array("Startle Shot 1",  2,   2, "Raise posture.", 0, 0),
+	new Array("Startle Shot 2",  4,   2, "Raise posture.", 0, 0),
+	new Array("Strafe Shot 1", 2,   2, "Clears enemy cover.", 0, 0),
+	new Array("Strafe Shot 2", 5,  2, "Cone. Clears enemy cover.", 0, 0),
+	new Array("Surprise Shot",  0,   0, "Broken?", 0, 0),
+	new Array("MM: Head Shot 1", 1.5,   1.5, "Mind pool.", 0, 3),
+	new Array("MM: Head Shot 2", 2.5,   1.5, "Mind pool.", 0, 3),
+	new Array("MM: Mind Shot 1",  1.5,       1, "Mind pool. DoT.", 1, 3),
+	new Array("MM: Overcharge Shot 1", 2.75, 1.25, "Weapon Decay.", 0, 0),
+	new Array("MM: Overcharge Shot 2", 3.75, 2.00, "Weapon Decay.", 0, 0),
+	new Array("MM: Point Blank Area 1", 2, 1.5, "Cone, 12m Range.", 0, 0),
+	new Array("MM: Point Blank Single 1", 2, 1.5, "Single, 12m Range.", 0, 0),
+	new Array("MM: Suppression fire 1", 1.5, 1.5, "Posture down.", 0, 0),
+	new Array("MM: Threaten Shot", 0.25, 2, "Chance for enemy to flee.", 0, 0),
+	new Array("MM: Warning Shot", 0.25, 2, "Keep enemy at range.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [7][x][x] Swordsman
+new Array(
+	new Array("Area 1",   2,  1.5, "Area. Lower posture.", 0, 0),
+	new Array("Area 2",3,  2,"Area. Lower posture.", 0, 0),
+	new Array("Area 3",  4,  2.5, "Area. Lower posture. Dizzy.", 0, 0),
+	new Array("Head Hit 2",2.5,  1.75, "Mind pool.", 0, 3),
+	new Array("Head Hit 3",3.5,  2.25, "Mind pool.", 0, 3),
+	new Array("Hit 2",3,  2, "Damage", 0, 0),
+	new Array("Hit 3",4,  2.5, "Dizzy.", 0, 0),
+	new Array("Mind Hit 1",1,  1.25, "Mind pool. DoT.", 1, 3),
+	new Array("Mind Hit 2",2,  2, "Mind pool. DoT.", 1, 3),	
+	new Array("Spin Attack 2",3,  2.5, "Area.", 0, 0),	
+	new Array("Sweep 2",2, 2.5, "Area. Lower posture.", 0, 0),
+	new Array("MB: Head Hit 1",1.5,  1.25, "Mind pool.", 0, 3),
+	new Array("MB: Hit 1",2,  1.5, "Damage", 0, 0),
+	new Array("MB: Lunge 1",1,  1.5, "15m range. Posture Down.", 0, 0),
+	new Array("MB: Lunge 2",1,  2.5, "15m Range. Knockdown.", 0, 0),
+	new Array("MB: Spin Attack 1",2, 1.5, "Area.", 0, 0),
+	new Array("MB: Sweep 1",1.5,  1.5, "Lower posture.", 0, 0),	
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+),
+// specials [8][x][x] TKM
+new Array(
+	
+	new Array("Unarmed Body Hit 1",2.5,   2,  "Health pool.", 0, 1),
+	new Array("Unarmed Combo 1", 2,  2,  "All 3 pools.", 0, 4),
+	new Array("Unarmed Combo 2", 3,   4,  "All 3 pools.", 0, 4),
+	new Array("Unarmed Dizzy 1", 1.5,   2,  "Dizzy.", 0, 0),
+	new Array("Unarmed Head Hit 1", 2.5,   2,  "Mind pool", 0, 3),
+	new Array("Unarmed Hit 2", 3,   2.5,  "Damage", 0, 0),
+	new Array("Unarmed Hit 3", 4,   3,  "Damage", 0, 0),
+	new Array("Unarmed Knockdown 1",1,   1.5,  "Knockdown.", 0, 0),
+	new Array("Unarmed Knockdown 2",1.5,   2,  "Knockdown.", 0, 0),
+	new Array("Unarmed Leg Hit 1", 2.5,   2,  "Action pool.", 0, 2),
+	new Array("Unarmed Spin Attack 2", 3,   3,  "Area.", 0, 0),
+	new Array("MB: Unarmed Blind", 1.5,   2,  "Blind.", 0, 0),
+	new Array("MB: Unarmed Hit 1", 2,   1.5,  "Damage", 0, 0),
+	new Array("MB: Unarmed Lunge 1", 2,   1.5,  "15m range. Posture Down.", 0, 0),
+	new Array("MB: Unarmed Lunge 2", 3,   2,  "15m range. Posture Down.", 0, 0),
+	new Array("MB: Unarmed Spin Attack 1", 2,   2,  "Area.", 0, 0),
+	new Array("MB: Unarmed Stun 1", 1.25,   2,  "Stun.", 0, 0),
+	new Array("Auto", 1, 1, "Normal attack.", 0, 0)
+)
+);
+
+
+	var minD1;
+	var maxD1;
+	var weaponSpeed1;
+	var dps
+	var playerSpeed1;
+	var basicSpeed;
+	var actualSpeed;
+	var delayBonus;
+	var damageBonus;
+	var professionChoice;
+	var pvpMod =1;
+	var mitigation=1;
+	
+	var APBonus;
+	
+	var originalMin1=0;
+	var originalMax1=0;
+	var originalSpeed1=0;
+	
+
+function setEnemies (choice) {
+	document.getElementById('selectionEnemyArmor').value= enemies[choice][1];
+	document.getElementById('TextEnemyKinetic').value= enemies[choice][2];
+	document.getElementById('TextEnemyEnergy').value= enemies[choice][3];
+	document.getElementById('TextEnemyBlast').value= enemies[choice][4];
+	document.getElementById('TextEnemyHeat').value= enemies[choice][5];
+	document.getElementById('TextEnemyCold').value= enemies[choice][6];
+	document.getElementById('TextEnemyElectricity').value= enemies[choice][7];
+	document.getElementById('TextEnemyAcid').value= enemies[choice][8];
+	document.getElementById('TextEnemyStun').value= enemies[choice][9];	
+	calculateDPS1();
+}
+
+// swgemu codes goes kinetic,energy,blast,heat,cold,electric,acid,stun,ls
+
+enemies = new Array (
+	new Array ("Preloaded Enemies", 0, 0, 0, 0, 0, 0, 0, 0, 0),
+	new Array ("Nightsister Elder", 3,100, 25, 25, 100, 100, 100, 100, 100),
+	new Array ("Nightsister Protector", 2,55,100,55,100,100,100,100,100),
+	new Array ("Nightsister Spellweaver", 2, 5,100,5,100,100,100,100,100),
+	new Array ("Axkva Min", 3, 100,35,35,100,100,100,100,100),
+	new Array ("Acklay", 2, 40,45,55,55,45,45,40,40),
+	new Array ("Gorax", 3, 65,65,65,65,65,65,65,65),
+	new Array ("Kimogila", 2, 45,75,0,75,0,0,100,0),
+	new Array ("Giant Kimogila", 2, 35,80,35,80,35,35,100,20),
+	new Array ("Giant Dune Kimogila", 2, 65,80,65,100,65,65,100,65),
+	new Array ("Janta Scout", 1, 0, 35,10,10,10,70,10,10),
+	new Array ("All fives", 0 , 5 ,5 , 5, 5, 5, 5, 5, 5),
+	new Array ("Rancor", 1, 30,30,0,60,60,60,0,0),
+	new Array ("Canyon Krayt", 3,60,60,60,60,20,60,60,60),
+	new Array ("Ancient Krayt", 3, 95,95,95,95,65,95,95,95),
+	new Array ("Grand Krayt", 3, 90,90,90,100,65,90,90,90),
+    new Array ("BH: Force Crystal Hunter", 2, 80, 80, 80, 80, 80, 80, 80, 80),
+	new Array ("BH: Spiderclan Auspex", 2, 55,100,100,75,100,100,90,55),
+	new Array ("BH: Nightsister Outcast", 1, 30,30,30,100,100,100,100,100),
+	new Array ("BH: SMC Arch Witch", 2, 100,15,15,100,100,100,100,100),
+	new Array ("BH: Feral Force Wielder", 0, 80,80,80,80,80,80,80,80),
+    new Array ("DWB: Super Battle Droid", 2, 85,95,100,60,100,25,40,85),
+	new Array ("DWB: Black Sun Assassin", 2, 55,55,70,45,75,80,55,45),
+	new Array ("DWB: Black Sun Guard", 2, 40,40,60,35,55,70,35,40),
+	new Array ("DWB: Black Sun Overlord", 3, 80,80,90,80,45,45,100,70)
+
+);
+
+
+
+
+function preloaded1(weaponChoice) {
+	// get the selection from the list box
+	document.getElementById('TextWeaponSpeed1').value= weapons[weaponChoice][1];
+	document.getElementById('TextMinDamage1').value= weapons[weaponChoice][2];
+	document.getElementById('TextMaxDamage1').value= weapons[weaponChoice][3];
+	document.getElementById('selectionDamageType1').value= weapons[weaponChoice][4];
+	document.getElementById('selectionArmorPiercing1').value= weapons[weaponChoice][5];
+	document.getElementById('selectionProfession1').value= weapons[weaponChoice][6]+1;
+	setSpecials1(weapons[weaponChoice][6]+1);
+	
+	//set the pups and orginals back
+	
+	originalMin1 = weapons[weaponChoice][2];
+	originalMax1 = weapons[weaponChoice][3];
+	originalSpeed1 = weapons[weaponChoice][1];
+	
+	pupSpeedOff1();
+	pupMinOff1();
+	pupMaxOff1();
+	
+}
+
+function setPVP() {
+	if (document.getElementById('checkboxPVP').checked==true) {
+		pvpMod=0.25;
+		enablePSG();
+	} else {
+		pvpMod=1;
+		disablePSG();
+	}
+	
+	calculateDPS1();
+}
+
+
+
+
+function setMitigation(level) {
+	
+	// mit 1 reduce range by 20%  range*0.8
+	// mit 2 reduce range by 40% range*0.6
+	//mit 3 reduce range by 60%  range*0.4
+	mitigation = 1-level*0.2
+	calculateDPS1();
+		
+}
+
+function appendRow() {
+    var tbl = document.getElementById('dataTable'), // table reference
+        row = tbl.insertRow(tbl.rows.length),      // append table row
+        j;
+    // insert table cells to the new row
+    for (j = 0; j < tbl.rows[0].cells.length; j++) {
+        createCell(row.insertCell(j), j, 'row');
+		
+    }
+	//row.style.backgroundColor = "#EEF8FE";
+	
+}
+
+function createCell(cell, text, style) {
+    var div = document.createElement('div'), // create DIV element
+        txt = document.createTextNode(text); // create text node
+    div.appendChild(txt);                    // append text node to the DIV
+    div.setAttribute('class', style);        // set DIV class attribute
+    div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+    cell.appendChild(div);                   // append DIV to the table cell
+	if (text==2){
+		cell.id = 'highlightHealth';
+	}	
+	if (text==3){
+		cell.id = 'highlightAction';
+	}
+	if (text==4){
+		cell.id = 'highlightMind';
+	}
+}
+
+function deleteRows() {
+    var tbl = document.getElementById('dataTable'), // table reference
+        lastRow = tbl.rows.length-1,             // set the last row index
+        i;
+    // delete rows with index greater then 0
+    for (i = lastRow; i > 1; i--) {
+        tbl.deleteRow(i);
+    }
+}
+
+// set specials
+function setSpecials1(choice){
+	
+	
+	
+	
+	// write the specials, effects, dmod and delaymod
+	professionChoice = choice;
+	var length = specials[choice-1].length;
+	// enable unarmed bonus if profession = TKM
+	if (professionChoice-1 == 8){
+		document.getElementById('TextUnarmedBonus1').disabled= false;
+	} else {
+		document.getElementById('TextUnarmedBonus1').disabled= true;
+		document.getElementById('TextUnarmedBonus1').value = null;
+
+		
+	}
+
+	//delete all the table rows?
+	deleteRows();
+	
+	var i;
+	
+	//i=1 as there is already a first row, i<length so ??
+	for (i=1; i<length; i++){
+		appendRow();
+	}
+	
+	
+	//i=1 for first line of table, length+1 to get the whole table cleared
+	for (i=1; i<length+1; i++){
+
+		//clear the odd data
+		var x=document.getElementById('dataTable').rows[i].cells;
+		x[0].innerHTML = null;
+		x[1].innerHTML = null;
+		x[2].innerHTML = null;
+		x[3].innerHTML = null;
+		x[4].innerHTML = null;
+		x[6].innerHTML = null;
+		x[7].innerHTML = null;
+	}
+	
+	
+	// i = 1 for first row of table, length +1 to fit whole array
+	for (i=1; i<length+1; i++){	
+		//write special name to col 0
+		 x=document.getElementById('dataTable').rows[i].cells;
+		x[0].innerHTML = specials[choice-1][i-1][0];
+		// write the damage mod
+		x[6].innerHTML = specials[choice-1][i-1][1];
+		// write the delay mod
+		x[7].innerHTML = specials[choice-1][i-1][2];
+		// write the effects
+		x[5].innerHTML = specials[choice-1][i-1][3];
+			
+	}
+	
+	calculateDPS1();
+
+}
+
+
+// ap bonus
+function getAPBonus(APTemp){
+	var enemyArmor = +document.getElementById('selectionEnemyArmor').value;
+	
+	// check if enemy is vulnerable then set the ap to 1 if it is
+	
+		var comparison = APTemp - enemyArmor;
+		// higher ap apply 1.25 power bonus
+		if (comparison >0) {
+			APBonus = Math.pow(1.25, comparison);
+		} else
+		// lower ap apply 0.5 power penalty
+		if (comparison <0) {
+		   comparison = Math.abs(comparison);
+           APBonus = (Math.pow(0.5, (comparison)));
+		} else
+		//ap the same
+		if (comparison ==0) {
+			APBonus=1;
+		}							
+}
+
+// get resists
+function getResists(weaponTemp) {
+	// check the resist against the weapon
+	// set the resist %
+	damageTypes = new Array;
+	damageTypes[0] = +document.getElementById('TextEnemyKinetic').value;
+	damageTypes[1] = +document.getElementById('TextEnemyEnergy').value;
+	damageTypes[2] = +document.getElementById('TextEnemyElectricity').value;
+	damageTypes[3] = +document.getElementById('TextEnemyStun').value;
+	damageTypes[4] = +document.getElementById('TextEnemyBlast').value;
+	damageTypes[5] = +document.getElementById('TextEnemyHeat').value;
+	damageTypes[6] = +document.getElementById('TextEnemyCold').value;
+	damageTypes[7] = +document.getElementById('TextEnemyAcid').value;
+	
+	return damageTypes[weaponTemp];
+
+	
+}
+
+// get shields
+function getShield(weaponTemp){
+	shieldTypes = new Array;
+	shieldTypes[0] = 0;
+	shieldTypes[1] = +document.getElementById('textShieldEnergy').value;
+	shieldTypes[2] = +document.getElementById('textShieldElectricity').value;
+	shieldTypes[3] = +document.getElementById('textShieldStun').value;
+	shieldTypes[4] = 0;
+	shieldTypes[5] = +document.getElementById('textShieldHeat').value;
+	shieldTypes[6] = +document.getElementById('textShieldCold').value;
+	shieldTypes[7] = 0;
+	
+	return shieldTypes[weaponTemp];
+	
+}
+
+// calculate dps
+function calculateDPS1(){
+	
+
+	
+	//calculate the tkm unarmed bonus
+	var unarmedBonus=1;
+	if (professionChoice-1 == 8){
+		unarmedBonus=(+document.getElementById('TextUnarmedBonus1').value+100)/100;
+	}
+	
+	
+	// calculate the resist % - must come before APBonus check
+	var weaponType = +document.getElementById('selectionDamageType1').value;
+	
+	var resistAmount=getResists(weaponType);
+	
+	var shieldResist = getShield(weaponType);
+	
+	// get ap bobnus
+	var playerArmor = +document.getElementById('selectionArmorPiercing1').value;
+	getAPBonus(playerArmor);
+
+
+	// gets the data
+	weaponSpeed1 = +document.getElementById('TextWeaponSpeed1').value;
+	minD1 = +document.getElementById('TextMinDamage1').value;
+	maxD1 = +document.getElementById('TextMaxDamage1').value;
+	playerSpeed1 = +document.getElementById('TextPlayerSpeed1').value;
+	
+	// reset maxD1 depending on mitigation
+	// pvp only
+	if (pvpMod==0.25){
+		var range=maxD1-minD1;
+		range=range*mitigation;
+		maxD1=minD1+range;
+	}
+			
+	
+	
+	if (weaponSpeed1!=null && minD1!=null && maxD1!=null && playerSpeed1!=null){
+		basicSpeed = (100-playerSpeed1)/100*weaponSpeed1;
+	
+
+	// finds the length of the dataset	
+		var length;
+		length = specials[professionChoice-1].length;
+
+		// loops and fills	
+		var i;
+
+		for (i = 0; i <length; i++)
+		{
+			// get the actual speed of the attack
+			delayBonus=specials[professionChoice-1][i][2];
+			
+			//set min speed of 1
+			actualSpeed = basicSpeed * delayBonus;
+			if (actualSpeed < 1) {
+                actualSpeed = 1;
+            }
+			
+			//round actual speed
+			var bigSpeed = actualSpeed*10;
+			bigSpeed = Math.round(bigSpeed);
+			actualSpeed = bigSpeed/10;
+			
+			// decide on the standard damage mod 1.5 or 1.86
+			// ranged professions 0, 1, 2, 5 and 6 get 1.5
+			// melee professions 3, 4, 7 and 8 get 1.86
+			var standardMod;
+			
+			if (professionChoice-1 == 0 || professionChoice-1==1 || professionChoice-1==2 || professionChoice-1==5 || professionChoice-1==6  ){
+				standardMod=1.5;
+			} else {
+				standardMod=1.86;
+			};
+			
+			
+			
+			
+			
+			// get the dmod and calculate the dps
+			// remember to include the 1.86 melee or 1.5 ranged
+
+			damageBonus=specials[professionChoice-1][i][1]
+			dps = ((minD1+maxD1)/2 *damageBonus *standardMod*unarmedBonus)/actualSpeed;
+			
+			// apply the shield mod if pvp is enabled
+			if (pvpMod==0.25){
+				dps = dps*(100-shieldResist)/100;
+			}
+			
+			// next take off the resistances
+			dps = dps*(100-resistAmount)/100;
+			
+			// then add the ap bonus		
+			dps = dps*APBonus;
+			// apply the pvp mod
+			dps = dps*pvpMod;
+			
+			
+			
+			// round the dps
+			dps = Math.round(dps);
+			
+			// calculate min and max range for the special and round them
+			var minModified = (minD1*damageBonus*standardMod*unarmedBonus);
+			var maxModified = (maxD1*damageBonus*standardMod*unarmedBonus);
+			minModified = minModified*(100-resistAmount)/100;
+			maxModified = maxModified*(100-resistAmount)/100;
+			minModified = Math.round(minModified*APBonus*pvpMod);
+			maxModified = Math.round(maxModified*APBonus*pvpMod);
+			
+							
+			
+			//loop to put data in correct row for sorting
+			var p;
+			for (p=1;p<length+1; p++) {
+				
+				//next check the current special
+				x = document.getElementById('dataTable').rows[p].cells;
+				rowSpecial = x[0].innerHTML;
+				
+				
+				if (rowSpecial==specials[professionChoice-1][i][0]){
+					// calc
+					// calculate the single pool dps
+					var pool = specials[professionChoice-1][i][5];
+					var healthPoolDamage, actionPoolDamage, mindPoolDamage;
+                                        // includes pool 6 for commando random and health dot
+                                        if (pool==0 || pool==6) {
+						healthPoolDamage = dps*0.5;
+						actionPoolDamage = dps*0.35;
+						mindPoolDamage = dps*0.15;
+					}
+					if (pool==1) {
+						healthPoolDamage=dps;
+						actionPoolDamage=0;
+						mindPoolDamage=0;
+					}
+					if (pool==2) {
+						healthPoolDamage=0;
+						actionPoolDamage=dps;
+						mindPoolDamage=0;
+					}
+					if (pool==3) {
+						healthPoolDamage=0;
+						actionPoolDamage=0;
+						mindPoolDamage=dps;
+					}
+					
+                                        // added for scatter shot and hit
+                                        if (pool==4) {
+						healthPoolDamage = dps*0.34;
+						actionPoolDamage = dps*0.34;
+						mindPoolDamage = dps*0.34;
+					}
+                                        // added for double tap health and action pool only
+                                        if (pool==5) {
+						healthPoolDamage = dps*1;
+						actionPoolDamage = dps*1;
+						mindPoolDamage = dps*0;
+                        dps=dps*2;
+					}
+
+					// round it
+					healthPoolDamage = Math.round(healthPoolDamage);
+					actionPoolDamage = Math.round(actionPoolDamage);
+					mindPoolDamage = Math.round(mindPoolDamage);
+					
+					
+					//writes the dps
+					x=document.getElementById('dataTable').rows[p].cells;
+					x[1].innerHTML = dps;
+					x[2].innerHTML = healthPoolDamage;
+					x[3].innerHTML = actionPoolDamage;
+					x[4].innerHTML = mindPoolDamage;
+					x[8].innerHTML = actualSpeed;
+					x[9].innerHTML = minModified;
+					x[10].innerHTML = maxModified;
+					
+					
+				} // end if
+			
+			} // end for p loop
+		}// end for i loop
+		
+	}// end if weapon speed !=null 
+	
+ 		$("table").trigger("update");
+ 		//update jsort
+				
+}
+
+
+
+
+
+
+function minReset1() {
+	if (originalMin1 != 0) {
+	document.getElementById('TextMinDamage1').value = originalMin1;
+	originalMin1=0;
+	}
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function minAddFifteen1() {
+	var newMin;
+	if (originalMin1 == 0){
+		originalMin1 = +document.getElementById('TextMinDamage1').value;		
+	}
+	
+	var minMultiplier = +document.getElementById('TextMinA').value;
+	minMultiplier = 1+minMultiplier/100
+	newMin = Math.round(originalMin1*minMultiplier);
+	document.getElementById('TextMinDamage1').value = newMin;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function minAddThirty1() {
+	var newMin;
+	if (originalMin1 == 0){
+		originalMin1 = +document.getElementById('TextMinDamage1').value;		
+	}
+	var minMultiplier = +document.getElementById('TextMinB').value;
+	minMultiplier = 1+minMultiplier/100
+	newMin = Math.round(originalMin1*minMultiplier);
+	document.getElementById('TextMinDamage1').value = newMin;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function maxReset1() {
+	if (originalMax1 != 0) {
+	document.getElementById('TextMaxDamage1').value = originalMax1;
+	originalMax1=0;
+	}
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function maxAddFifteen1() {
+	var newMax;
+	if (originalMax1 == 0){
+		originalMax1 = +document.getElementById('TextMaxDamage1').value;		
+	}
+	var minMultiplier = +document.getElementById('TextMaxA').value;
+	maxMultiplier = 1+minMultiplier/100
+	newMax = Math.round(originalMax1*maxMultiplier);
+	document.getElementById('TextMaxDamage1').value = newMax;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function maxAddThirty1() {
+	var newMax;
+	if (originalMax1 == 0){
+		originalMax1 = +document.getElementById('TextMaxDamage1').value;		
+	}
+	var minMultiplier = +document.getElementById('TextMaxB').value;
+	maxMultiplier = 1+minMultiplier/100
+	newMax = Math.round(originalMax1*maxMultiplier);
+	document.getElementById('TextMaxDamage1').value = newMax;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function speedReset1() {
+	if (originalSpeed1 != 0) {
+	document.getElementById('TextWeaponSpeed1').value = originalSpeed1;
+	originalSpeed1=0;
+	}
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function speedAddFifteen1() {
+	var newSpeed;
+	if (originalSpeed1 == 0){
+		originalSpeed1 = +document.getElementById('TextWeaponSpeed1').value;		
+	}
+	
+	var speedMultiplier = +document.getElementById('TextSpeedA').value;
+	speedMultiplier = 10-speedMultiplier/10;
+	
+	newSpeed = Math.round(originalSpeed1*speedMultiplier);
+	newSpeed = newSpeed/10;
+	document.getElementById('TextWeaponSpeed1').value = newSpeed;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function speedAddThirty1() {
+	var newSpeed;
+	if (originalSpeed1 == 0){
+		originalSpeed1 = +document.getElementById('TextWeaponSpeed1').value;		
+	}
+	var speedMultiplier = +document.getElementById('TextSpeedB').value;
+	speedMultiplier = 10-speedMultiplier/10;
+	
+	newSpeed = Math.round(originalSpeed1*speedMultiplier);
+	newSpeed = newSpeed/10;
+	document.getElementById('TextWeaponSpeed1').value = newSpeed;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function pupSpeedOff1 () {
+	var rad = document.getElementById('RadioGroupMin1_0')
+	rad.checked = true;
+	originalSpeed1 = 0;
+	calculateDPS1();
+	calculateDPS1();
+}
+function pupMinOff1 () {
+	var rad = document.getElementById('RadioGroupMin1_3')
+	rad.checked = true;
+	originalMin1 = 0;
+	calculateDPS1();
+	calculateDPS1();
+}
+function pupMaxOff1 () {
+	var rad = document.getElementById('RadioGroupMin1_6')
+	rad.checked = true;
+	originalMax1 = 0;
+	calculateDPS1();
+	calculateDPS1();
+}
+
+function pupSpeedAChanged() {
+	if 	(document.getElementById('RadioGroupMin1_1').checked == true){
+		speedAddFifteen1();	
+	}
+	
+}
+
+function pupSpeedBChanged() {
+	if 	(document.getElementById('RadioGroupMin1_2').checked == true){
+		speedAddThirty1();	
+	}
+	
+}
+
+function pupMinAChanged() {
+	if 	(document.getElementById('RadioGroupMin1_4').checked == true){
+		minAddFifteen1();	
+	}
+	
+}
+
+function pupMinBChanged() {
+	if 	(document.getElementById('RadioGroupMin1_5').checked == true){
+		minAddThirty1();	
+	}
+	
+}
+
+function pupMaxAChanged() {
+	if 	(document.getElementById('RadioGroupMin1_7').checked == true){
+		maxAddFifteen1();	
+	}
+	
+}
+
+function pupMaxBChanged() {
+	if 	(document.getElementById('RadioGroupMin1_8').checked == true){
+		maxAddThirty1();	
+	}
+	
+}
+
+
+
+</script>
+<style type="text/css">
+
+
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+#dataTable tr td {
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+}
+
+#dotBox{
+	border: thin groove #000;
+}
+
+#plainHeader{
+	background-color: #BCC6CC;
+}
+#highlightHealthHeader { background-color: #d6adad; }
+#highlightActionHeader { background-color: #b7cdc9; }
+#highlightMindHeader { background-color: #c1d6ff; }
+
+#highlightHealth { background-color: #ead6d6; }
+#highlightAction { background-color: #dbe6e4; }
+#highlightMind { background-color: #e0eaff; }
+
+
+#holder, #holder2, #holder3, #holder4, #holder5, #holder6, #holder7, #holder8, #holder10, #holder11, #holder12, #holder13{
+	border: thin groove #000;
+	background-color: #EEF8FE;
+}
+#holder13 {
+	border: thin solid #000;
+}
+
+#dotBoxLeft {
+	background-color: #EEF8FE;
+}
+
+
+
+#holder2, #holder3, #holder4, #holder5, #holder8, #holder, #holder6, #holder7, #holder5, #holder8, #holder12 {
+	height: 90px	
+}
+
+#dataTable {
+	background-color: #EEF8FE;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+}
+
+#dataTable tr:hover {
+    background-color:#BDBCBA;
+}
+
+
+#dataTable th:hover {
+	background-color:#98AFC7;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: none;
+	border-top-color: #000;
+	border-right-color: #000;
+	border-bottom-color: #000;
+	border-left-color: #000;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+
+
+#pups tr td, #pups2 tr td, #pups3 tr td, #pups4 tr td {
+	font-size: 9px;
+}
+
+
+#details {
+	font-size: 9px;
+	color: #666;
+}
+
+#TextSpeedA, #TextSpeedB, #TextMinA, #TextMinB, #TextMaxA, #TextMaxB{
+	width: 20px;
+	font-size: 9px;
+	
+}</style>
+<style type="text/css">
+body {
+	background-color: #D6D6D6;
+}</style>
+</head>
+<body><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<style type="text/css">
+body {
+  margin-top:0 !important;
+  padding-top:0 !important;
+  /*min-width:800px !important;*/
+}
+</style>
+<div id="wm-ipp-base" lang="en" style="display:none;direction:ltr;">
+<div id="wm-ipp" style="position:fixed;left:0;top:0;right:0;">
+<div id="wm-ipp-inside">
+  <div style="position:relative;">
+    <div id="wm-logo" style="float:left;width:130px;padding-top:10px;">
+      <a href="/web/" title="Wayback Machine home page"><img src="/_static/images/toolbar/wayback-toolbar-logo.png" alt="Wayback Machine" width="110" height="39" border="0" /></a>
+    </div>
+    <div class="r" style="float:right;">
+      <div id="wm-btns" style="text-align:right;height:25px;">
+                  <div id="wm-save-snapshot-success">success</div>
+          <div id="wm-save-snapshot-fail">fail</div>
+          <a id="wm-save-snapshot-open" href="#"
+	     title="Share via My Web Archive" >
+            <span class="iconochive-web"></span>
+          </a>
+          <a href="https://archive.org/account/login.php"
+             title="Sign In"
+             id="wm-sign-in"
+          >
+            <span class="iconochive-person"></span>
+          </a>
+          <span id="wm-save-snapshot-in-progress" class="iconochive-web"></span>
+        	<a href="http://faq.web.archive.org/" title="Get some help using the Wayback Machine" style="top:-6px;"><span class="iconochive-question" style="color:rgb(87,186,244);font-size:160%;"></span></a>
+	<a id="wm-tb-close" href="#close" onclick="__wm.h(event);return false;" style="top:-2px;" title="Close the toolbar"><span class="iconochive-remove-circle" style="color:#888888;font-size:240%;"></span></a>
+      </div>
+      <div id="wm-share">
+          <a href="/web/20190103003750/http://web.archive.org/screenshot/http://www.swgcalc.x10.mx/"
+             id="wm-screenshot"
+             title="screenshot">
+            <span class="wm-icon-screen-shot"></span>
+          </a>
+	<a id="wm-share-facebook" href="#" data-url="https://web.archive.org/web/20190103003750/http://www.swgcalc.x10.mx:80/" title="Share on Facebook" style="margin-right:5px;" target="_blank"><span class="iconochive-facebook" style="color:#3b5998;font-size:160%;"></span></a>
+	<a id="wm-share-twitter" href="#" data-url="https://web.archive.org/web/20190103003750/http://www.swgcalc.x10.mx:80/" title="Share on Twitter" style="margin-right:5px;" target="_blank"><span class="iconochive-twitter" style="color:#1dcaff;font-size:160%;"></span></a>
+      </div>
+    </div>
+    <table class="c" style="">
+      <tbody>
+	<tr>
+	  <td class="u" colspan="2">
+	    <form target="_top" method="get" action="/web/submit" name="wmtb" id="wmtb"><input type="text" name="url" id="wmtbURL" value="http://www.swgcalc.x10.mx/" onfocus="this.focus();this.select();" /><input type="hidden" name="type" value="replay" /><input type="hidden" name="date" value="20190103003750" /><input type="submit" value="Go" /></form>
+	  </td>
+	  <td class="n" rowspan="2" style="width:110px;">
+	    <table>
+	      <tbody>
+		<!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+		<tr class="m">
+		  <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20181116024620/http://www.swgcalc.x10.mx:80/" title="16 Nov 2018"><strong>Nov</strong></a></td>
+		  <td class="c" id="displayMonthEl" title="You are here: 00:37:50 Jan 03, 2019">JAN</td>
+		  <td class="f" nowrap="nowrap"><a href="https://web.archive.org/web/20190204180257/http://www.swgcalc.x10.mx:80/" title="04 Feb 2019"><strong>Feb</strong></a></td>
+		</tr>
+		<!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+		<tr class="d">
+		  <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20181213141039/http://www.swgcalc.x10.mx:80/" title="14:10:39 Dec 13, 2018"><img src="/_static/images/toolbar/wm_tb_prv_on.png" alt="Previous capture" width="14" height="16" border="0" /></a></td>
+		  <td class="c" id="displayDayEl" style="width:34px;font-size:24px;white-space:nowrap;" title="You are here: 00:37:50 Jan 03, 2019">03</td>
+		  <td class="f" nowrap="nowrap"><a href="https://web.archive.org/web/20190204180257/http://www.swgcalc.x10.mx:80/" title="18:02:57 Feb 04, 2019"><img src="/_static/images/toolbar/wm_tb_nxt_on.png" alt="Next capture" width="14" height="16" border="0" /></a></td>
+		</tr>
+		<!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+		<tr class="y">
+		  <td class="b" nowrap="nowrap"><a href="https://web.archive.org/web/20171231003927/http://www.swgcalc.x10.mx:80/" title="31 Dec 2017"><strong>2017</strong></a></td>
+		  <td class="c" id="displayYearEl" title="You are here: 00:37:50 Jan 03, 2019">2019</td>
+		  <td class="f" nowrap="nowrap"><a href="https://web.archive.org/web/20200118105448/http://www.swgcalc.x10.mx:80/" title="18 Jan 2020"><strong>2020</strong></a></td>
+		</tr>
+	      </tbody>
+	    </table>
+	  </td>
+	</tr>
+	<tr>
+	  <td class="s">
+	    	    <div id="wm-nav-captures">
+	      	      <a class="t" href="/web/20190103003750*/http://www.swgcalc.x10.mx/" title="See a list of every capture for this URL">56 captures</a>
+	      <div class="r" title="Timespan for captures of this URL">05 Mar 2014 - 18 Jan 2020</div>
+	      </div>
+	  </td>
+	  <td class="k">
+	    <a href="" id="wm-graph-anchor">
+	      <div id="wm-ipp-sparkline" title="Explore captures for this URL" style="position: relative">
+		<canvas id="wm-sparkline-canvas" width="625" height="27" border="0"></canvas>
+	      </div>
+	    </a>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <div style="position:absolute;bottom:0;right:2px;text-align:right;">
+      <a id="wm-expand" class="wm-btn wm-closed" href="#expand" onclick="__wm.ex(event);return false;"><span id="wm-expand-icon" class="iconochive-down-solid"></span> <span style="font-size:80%">About this capture</span></a>
+    </div>
+  </div>
+    <div id="wm-capinfo" style="border-top:1px solid #777;display:none; overflow: hidden">
+                    <div id="wm-capinfo-collected-by">
+    <div style="background-color:#666;color:#fff;font-weight:bold;text-align:center">COLLECTED BY</div>
+    <div style="padding:3px;position:relative" id="wm-collected-by-content">
+            <div style="display:inline-block;vertical-align:top;width:50%;">
+			<span class="c-logo" style="background-image:url(https://archive.org/services/img/alexacrawls);"></span>
+		Organization: <a style="color:#33f;" href="https://archive.org/details/alexacrawls" target="_new"><span class="wm-title">Alexa Crawls</span></a>
+		<div style="max-height:75px;overflow:hidden;position:relative;">
+	  <div style="position:absolute;top:0;left:0;width:100%;height:75px;background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 90%,rgba(255,255,255,255) 100%);"></div>
+	  Starting in 1996, <a href="http://www.alexa.com/">Alexa Internet</a> has been donating their crawl data to the Internet Archive.  Flowing in every day, these data are added to the <a href="http://web.archive.org/">Wayback Machine</a> after an embargo period.
+	</div>
+	      </div>
+      <div style="display:inline-block;vertical-align:top;width:49%;">
+			<span class="c-logo" style="background-image:url(https://archive.org/services/img/alexacrawls)"></span>
+		<div>Collection: <a style="color:#33f;" href="https://archive.org/details/alexacrawls" target="_new"><span class="wm-title">Alexa Crawls</span></a></div>
+		<div style="max-height:75px;overflow:hidden;position:relative;">
+	  <div style="position:absolute;top:0;left:0;width:100%;height:75px;background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 90%,rgba(255,255,255,255) 100%);"></div>
+	  Starting in 1996, <a href="http://www.alexa.com/">Alexa Internet</a> has been donating their crawl data to the Internet Archive.  Flowing in every day, these data are added to the <a href="http://web.archive.org/">Wayback Machine</a> after an embargo period.
+	</div>
+	      </div>
+    </div>
+    </div>
+    <div id="wm-capinfo-timestamps">
+    <div style="background-color:#666;color:#fff;font-weight:bold;text-align:center" title="Timestamps for the elements of this page">TIMESTAMPS</div>
+    <div>
+      <div id="wm-capresources" style="margin:0 5px 5px 5px;max-height:250px;overflow-y:scroll !important"></div>
+      <div id="wm-capresources-loading" style="text-align:left;margin:0 20px 5px 5px;display:none"><img src="/_static/images/loading.gif" alt="loading" /></div>
+    </div>
+    </div>
+  </div></div></div></div><div id="donato" style="position:relative;width:100%;">
+  <div id="donato-base">
+    <iframe id="donato-if" src="https://archive.org/includes/donate.php?as_page=1&amp;transpiled=0&amp;referer=https%3A//web.archive.org/web/20190103003750/http%3A//www.swgcalc.x10.mx/"
+	    scrolling="no" frameborder="0" style="width:100%; height:100%">
+    </iframe>
+  </div>
+</div>
+<!-- END WAYBACK TOOLBAR INSERT -->
+<table width="100%" border="0" cellspacing="0" cellpadding="20">
+<tbody>
+<tr>
+<table width="1010" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td align="center">
+<table width="1000" border="0" align="left" cellpadding="5" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="3" align="left" valign="top">
+<table width="585" border="0" cellpadding="5" cellspacing="0" id="holder11">
+<tbody>
+<tr>
+<td height="20" colspan="9" bgcolor="#BCC6CC">Enemy Armor and Resistances </td></tr>
+<tr>
+<td><select name="selectEnemies" id="selectionEnemies" style="width: 135px" onchange="setEnemies(this.selectedIndex); calculateDPS1();"></select></td>
+<td>Kinetic</td>
+<td><input name="TextEnemyKinetic" type="text" id="TextEnemyKinetic" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Electricity</td>
+<td><input name="TextEnemyElectricity" type="text" id="TextEnemyElectricity" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Blast</td>
+<td><input name="TextEnemyBlast" type="text" id="TextEnemyBlast" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Cold</td>
+<td><input name="TextEnemyCold" type="text" id="TextEnemyCold" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td></tr>
+<tr>
+<td><select name="selectEnemyArmor" id="selectionEnemyArmor" style="width: 135px" onchange="calculateDPS1();">
+<option value="0">None</option>
+<option value="1">Light</option>
+<option value="2">Medium</option>
+<option value="3">Heavy</option></select></td>
+<td>Energy</td>
+<td><input name="TextEnemyEnergy" type="text" id="TextEnemyEnergy" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Stun</td>
+<td><input name="TextEnemyStun" type="text" id="TextEnemyStun" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Heat</td>
+<td><input name="TextEnemyHeat" type="text" id="TextEnemyHeat" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td>
+<td>Acid</td>
+<td><input name="TextEnemyAcid" type="text" id="TextEnemyAcid" onchange="calculateDPS1();" value="0" size="3" maxlength="3"/></td></tr></tbody></table></td>
+<td colspan="2" align="left" valign="top">
+<table width="380" border="0" cellpadding="5" cellspacing="0" id="holder13">
+<tbody>
+<tr>
+<td height="20" colspan="8" bgcolor="#BCC6CC">Enemy Shield and Mitigation (PvP only)</td></tr>
+<tr>
+<td align="left">PvP</td>
+<td align="left"><input type="checkbox" name="checkboxPVP" id="checkboxPVP" onclick="setPVP();"/></td>
+<td align="left">Energy</td>
+<td align="left"><input name="textShieldEnergy" type="text" id="textShieldEnergy" value="40" size="3" maxlength="3" onchange="calculateDPS1();"/></td>
+<td align="left">Stun</td>
+<td align="left"><input name="textShieldStun" type="text" id="textShieldStun" value="30" size="3" maxlength="3" onchange="calculateDPS1();"/></td>
+<td align="left">Cold</td>
+<td align="left"><input name="textShieldCold" type="text" id="textShieldCold" value="30" size="3" maxlength="3" onchange="calculateDPS1();"/></td></tr>
+<tr>
+<td colspan="2" align="left">Mitigation</td>
+<td colspan="2" align="left"><select name="selectionMitigation" id="selectionMitigation" style="width: 100px" onchange="setMitigation(this.selectedIndex);">
+<option value="0">None</option>
+<option value="1">Mitigation 1</option>
+<option value="2">Mitigation 2</option>
+<option value="3">Mitigation 3</option></select></td>
+<td align="left">Elec</td>
+<td align="left"><input name="textShieldElectricity" type="text" id="textShieldElectricity" value="30" size="3" maxlength="3" onchange="calculateDPS1();"/></td>
+<td align="left">Heat</td>
+<td align="left"><input name="textShieldHeat" type="text" id="textShieldHeat" value="30" size="3" maxlength="3" onchange="calculateDPS1();"/></td></tr></tbody></table></td></tr>
+<tr>
+<td colspan="5" align="left" valign="top">&nbsp;</td></tr>
+<tr>
+<td align="left" valign="top">
+<table width="185" border="0" cellpadding="5" cellspacing="0" id="holder8">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Profession</td></tr>
+<tr>
+<td align="left" bgcolor="#EEF8FE"><select name="selectProfession" id="selectionProfession1" style="width: 160px" onchange="setSpecials1(this.selectedIndex);">
+<option value="0" selected="selected">Select Profession</option>
+<option value="1">Bounty Hunter</option>
+<option value="2">Carbineer</option>
+<option value="3">Commando</option>
+<option value="4">Fencer</option>
+<option value="5">Pikeman</option>
+<option value="6">Pistoleer</option>
+<option value="7">Rifleman</option>
+<option value="8">Swordsman</option>
+<option value="9">Teras Kasi Master</option></select></td></tr></tbody></table></td>
+<td align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder">
+<tbody>
+<tr>
+<td height="20" colspan="2" bgcolor="#BCC6CC">Weapon Speed</td></tr>
+<tr>
+<td bgcolor="#EEF8FE"><input name="TextWeaponSpeed1" type="text" id="TextWeaponSpeed1" onchange="pupSpeedOff1();" value="4" size="4"/></td>
+<td bgcolor="#EEF8FE">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" id="pups">
+<tbody>
+<tr>
+<td><input name="RadioGroupSpeed1" type="radio" id="RadioGroupMin1_0" value="radio" checked="checked" onchange="speedReset1();"/></td>
+<td colspan="2">No pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupSpeed1" value="radio" id="RadioGroupMin1_1" onchange="speedAddFifteen1();"/></td>
+<td><label for="TextSpeedA"></label><input name="TextSpeedA" type="text" id="TextSpeedA" value="15.0" onchange="pupSpeedAChanged();"/></td>
+<td>% pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupSpeed1" value="radio" id="RadioGroupMin1_2" onchange="speedAddThirty1();"/></td>
+<td><label for="TextSpeedB"></label><input name="TextSpeedB" type="text" id="TextSpeedB" value="30.0" onchange="pupSpeedBChanged();"/></td>
+<td>% pup</td></tr></tbody></table></td></tr></tbody></table></td>
+<td align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder6">
+<tbody>
+<tr>
+<td height="20" colspan="2" bgcolor="#BCC6CC">Minimum Damage</td></tr>
+<tr>
+<td bgcolor="#EEF8FE"><input name="TextMinDamage1" type="text" id="TextMinDamage1" onchange="pupMinOff1();" value="60" size="4"/></td>
+<td bgcolor="#EEF8FE">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" id="pups4">
+<tbody>
+<tr>
+<td><input name="RadioGroupMin1" type="radio" id="RadioGroupMin1_3" value="radio" checked="checked" onchange="minReset1();"/></td>
+<td colspan="2">No pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupMin1" value="radio" id="RadioGroupMin1_4" onchange="minAddFifteen1();"/></td>
+<td><input name="TextMinA" type="text" id="TextMinA" onchange="pupMinAChanged();" value="15.0" size="4" maxlength="4"/></td>
+<td>% pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupMin1" value="radio" id="RadioGroupMin1_5" onchange="minAddThirty1();"/></td>
+<td><input name="TextMinB" type="text" id="TextMinB" onchange="pupMinBChanged();" value="30.0" size="4" maxlength="4"/></td>
+<td>% pup</td></tr></tbody></table></td></tr></tbody></table></td>
+<td align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder7">
+<tbody>
+<tr>
+<td height="20" colspan="2" bgcolor="#BCC6CC">Maximum Damage</td></tr>
+<tr>
+<td bgcolor="#EEF8FE"><input name="TextMaxDamage1" type="text" id="TextMaxDamage1" onchange="pupMaxOff1();" value="400" size="4"/></td>
+<td bgcolor="#EEF8FE">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" id="pups2">
+<tbody>
+<tr>
+<td><input name="RadioGroupMax1" type="radio" id="RadioGroupMin1_6" value="radio" checked="checked" onchange="maxReset1();"/></td>
+<td colspan="2">No pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupMax1" value="radio" id="RadioGroupMin1_7" onchange="maxAddFifteen1();"/></td>
+<td><input name="TextMaxA" type="text" id="TextMaxA" onchange="pupMaxAChanged();" value="15.0" size="4" maxlength="4"/></td>
+<td>% pup</td></tr>
+<tr>
+<td><input type="radio" name="RadioGroupMax1" value="radio" id="RadioGroupMin1_8" onchange="maxAddThirty1();"/></td>
+<td><input name="TextMaxB" type="text" id="TextMaxB" onchange="pupMaxBChanged();" value="30.0" size="4" maxlength="4"/></td>
+<td>% pup</td></tr></tbody></table></td></tr></tbody></table></td>
+<td align="left" valign="top">
+<table width="185" border="0" cellpadding="5" cellspacing="0" id="holder12">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Preloaded Weapons</td></tr>
+<tr>
+<td align="left" bgcolor="#EEF8FE"><select name="Weapon1" id="selectionWeapons1" style="width: 160px" onchange="preloaded1(this.selectedIndex);"></select></td></tr></tbody></table></td></tr>
+<tr>
+<td rowspan="2" align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder3">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Damage Type</td></tr>
+<tr>
+<td height="39" align="left" bgcolor="#EEF8FE"><select name="selectDamageType" id="selectionDamageType1" style="width: 160px" onchange="calculateDPS1();">
+<option value="0">Kinetic</option>
+<option value="1">Energy</option>
+<option value="2">Electricity</option>
+<option value="3">Stun</option>
+<option value="4">Blast</option>
+<option value="5">Heat</option>
+<option value="6">Cold</option>
+<option value="7">Acid</option></select></td></tr></tbody></table></td>
+<td rowspan="2" align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder4">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Armor Piercing</td></tr>
+<tr>
+<td height="39" align="left" bgcolor="#EEF8FE"><select name="selectArmorPiercing" id="selectionArmorPiercing1" style="width: 140px" onchange="calculateDPS1();">
+<option value="0">None</option>
+<option value="1">Light</option>
+<option value="2">Medium</option>
+<option value="3">Heavy</option></select></td></tr></tbody></table></td>
+<td rowspan="2" align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder2">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Player Speed</td></tr>
+<tr>
+<td height="39" align="left" bgcolor="#EEF8FE"><input name="TextPlayerSpeed1" type="text" id="TextPlayerSpeed1" value="97" size="4" onchange="calculateDPS1();"/></td></tr></tbody></table></td>
+<td rowspan="2" align="left" valign="top">
+<table width="185" border="0" cellspacing="0" cellpadding="5" id="holder5">
+<tbody>
+<tr>
+<td height="20" bgcolor="#BCC6CC">Unarmed Bonus (TKM)</td></tr>
+<tr>
+<td height="40" align="left" bgcolor="#EEF8FE"><input name="TextUnarmedBonus1" type="text" id="TextUnarmedBonus1" size="4" onchange="calculateDPS1();"/></td></tr></tbody></table></td>
+<td height="48" align="left" valign="top"><input type="button" name="buttonCalculate" id="buttonCalculate" style="width: 185px; height: 45px" value="Recalculate" onclick="calculateDPS1()"/></td></tr>
+<tr>
+  
+</tr>
+<tr>
+<td colspan="5" align="left" valign="top"><table width="990" cellpadding="2" cellspacing="0" id="dataTable">
+  <thead>
+    <tr>
+      <th id="plainHeader" width="185" height="20" align="left" scope="col">Special</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Overall DPS</th>
+      <th id="highlightHealthHeader" width="60" align="left" scope="col">Health DPS</th>
+      <th id="highlightActionHeader" width="60" align="left" scope="col">Action DPS</th>
+      <th id="highlightMindHeader" width="60" align="left" scope="col"> Mind &nbsp; &nbsp; DPS</th>
+      <th id="plainHeader" width="200" align="left" scope="col">Effect</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Damage Mod</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Delay &nbsp; &nbsp; Mod</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Actual Speed</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Minimum Damage</th>
+      <th id="plainHeader" width="60" align="left" scope="col">Maximum Damage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">This table can be sorted.</td>
+      <td align="left">&nbsp;</td>
+      <td id="highlightHealth" align="left">&nbsp;</td>
+      <td id="highlightAction" align="left">&nbsp;</td>
+      <td id="highlightMind" align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+  </tbody>
+</table></td></tr>
+<tr>
+<td colspan="5" align="left" valign="top">&nbsp;</td></tr></tbody></table></td></tr></tbody></table>
+<p>&nbsp;</p>
+</body>
+</html>

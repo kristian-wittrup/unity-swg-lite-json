@@ -8,17 +8,11 @@ public class QuestCompleter : MonoBehaviour
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            CompleteObjective();
-        }
-    }
-
-    void CompleteObjective()
-    {
-        QuestManager questManager = Object.FindFirstObjectByType<QuestManager>();
-        if (questManager != null && questManager.currentQuest != null)
-        {
-            Debug.Log("Objective Completed: Talked to QuestCompleter");
-            questManager.CompleteObjective("Talked to QuestCompleter");
+            QuestManager questManager = Object.FindFirstObjectByType<QuestManager>();
+            if (questManager != null && questManager.currentQuest != null)
+            {
+                questManager.CompleteObjective("Objective1"); // Replace with the actual objective name
+            }
         }
     }
 

@@ -7,6 +7,6 @@ public class QuestData : ScriptableObject
     public string questDescription;
     public string questGiver;
     public string[] objectives;
-    public string rewardItem;
-    public string questCompleter; // New field for quest completion objective
+    public string questRewardLootGroupName; // Field for the loot group name
+    public string questCompleter; // Field for quest completion objective
 }

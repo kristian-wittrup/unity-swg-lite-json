@@ -2,32 +2,29 @@ using UnityEngine;
 
 public class QuestGiver : MonoBehaviour
 {
-    public QuestData questToGive; // Make sure this field is public
+    public QuestData questToGive;
+    private QuestManager questManager;
     private bool playerInRange;
+
+    void Start()
+    {
+        questManager = Object.FindFirstObjectByType<QuestManager>();
+        if (questManager == null)
+        {
+            Debug.LogError("QuestManager not found in the scene.");
+        }
+    }
 
     void Update()
     {
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("E key pressed");
-            Interact();
-        }
-    }
-
-    void Interact()
-    {
-        QuestManager questManager = Object.FindFirstObjectByType<QuestManager>();
-        if (questManager != null && questToGive != null)
-        {
             if (questManager.currentQuest == questToGive)
             {
-                if (questManager.currentQuest != null && questManager.currentQuest.questGiver == gameObject.name)
-                {
-                    questManager.CompleteObjective("Talked to QuestGiver");
-                }
-                else
+                if (questManager.GetCompletedObjectivesCount() == questToGive.objectives.Length)
                 {
                     Debug.Log("Quest Completed: " + questToGive.questTitle);
+                    questManager.CompleteQuest();
                 }
             }
             else

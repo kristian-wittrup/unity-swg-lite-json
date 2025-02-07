@@ -1,0 +1,15 @@
+[
+    {
+        "groupName": "QuestRewardLootGroup",
+        "lootItems": [
+            {
+                "itemPrefabName": "Sword",
+                "dropChance": 90.0
+            },
+            {
+                "itemPrefabName": "SwordTwo",
+                "dropChance": 30.0
+            }
+        ]
+    }
+]

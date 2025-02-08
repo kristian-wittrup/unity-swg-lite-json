@@ -1184,9 +1184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97cd6fe696a04a098489e0bdba4cdfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allPrefabsForCache:
-  - {fileID: 1199523514401361244, guid: 5b7e5faae7c4005478b84f71e7eeb2a7, type: 3}
-  - {fileID: 1199523514401361244, guid: 895e01776e47c4342b93bf85c6d64259, type: 3}
+  allPrefabsForCache: []
 --- !u!4 &944566682
 Transform:
   m_ObjectHideFlags: 0
@@ -1304,6 +1302,51 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1013673799
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1013673801}
+  - component: {fileID: 1013673800}
+  m_Layer: 0
+  m_Name: PrefabCacheArthurManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1013673800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013673799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97cd6fe696a04a098489e0bdba4cdfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allPrefabsForCache: []
+--- !u!4 &1013673801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013673799}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 34.25643, y: 17.783943, z: 0.48750305}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1028604398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,6 +1442,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4ed6e599316d48baa4de5b093cbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillPanel: {fileID: 0}
+  playerController: {fileID: 0}
+  professionListContainer: {fileID: 0}
+  skillGridContainer: {fileID: 0}
+  professionButtonPrefab: {fileID: 0}
+  skillButtonPrefab: {fileID: 0}
+  professionTitle: {fileID: 0}
 --- !u!114 &1028604403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1679,6 +1729,52 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1463776661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1463776663}
+  - component: {fileID: 1463776662}
+  m_Layer: 0
+  m_Name: PrefabCacheArthur
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1463776662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463776661}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97cd6fe696a04a098489e0bdba4cdfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allPrefabsForCache:
+  - {fileID: 0}
+--- !u!4 &1463776663
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463776661}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 34.25643, y: 17.783943, z: 0.48750305}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1475058833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1848,6 +1944,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4ed6e599316d48baa4de5b093cbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillPanel: {fileID: 0}
+  playerController: {fileID: 0}
+  professionListContainer: {fileID: 0}
+  skillGridContainer: {fileID: 0}
+  professionButtonPrefab: {fileID: 0}
+  skillButtonPrefab: {fileID: 0}
+  professionTitle: {fileID: 0}
 --- !u!4 &1511259799
 Transform:
   m_ObjectHideFlags: 0
@@ -2836,3 +2939,5 @@ SceneRoots:
   - {fileID: 917527559}
   - {fileID: 8159355585320204413}
   - {fileID: 944566682}
+  - {fileID: 1463776663}
+  - {fileID: 1013673801}

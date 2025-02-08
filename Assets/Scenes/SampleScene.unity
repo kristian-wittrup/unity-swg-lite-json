@@ -1155,6 +1155,53 @@ Transform:
   - {fileID: 832575519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &944566680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 944566682}
+  - component: {fileID: 944566681}
+  m_Layer: 0
+  m_Name: ArthurPrefabCache
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &944566681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944566680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97cd6fe696a04a098489e0bdba4cdfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allPrefabsForCache:
+  - {fileID: 1199523514401361244, guid: 5b7e5faae7c4005478b84f71e7eeb2a7, type: 3}
+  - {fileID: 1199523514401361244, guid: 895e01776e47c4342b93bf85c6d64259, type: 3}
+--- !u!4 &944566682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944566680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 34.25643, y: 17.783943, z: 0.48750305}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &996833437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,13 +1399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4ed6e599316d48baa4de5b093cbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillPanel: {fileID: 0}
-  playerController: {fileID: 0}
-  professionListContainer: {fileID: 1413581476}
-  skillGridContainer: {fileID: 1879041270}
-  professionButtonPrefab: {fileID: 895325910}
-  skillButtonPrefab: {fileID: 1670242055342035601, guid: 66e0c57b25f22b849908dae579ea882b, type: 3}
-  professionTitle: {fileID: 1681592124}
 --- !u!114 &1028604403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,17 +1617,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226635336}
   m_CullTransparentMesh: 1
---- !u!114 &1374596330 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 974238578668270715, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
-  m_PrefabInstance: {fileID: 505767155}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1413581475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1819,13 +1848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa4ed6e599316d48baa4de5b093cbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillPanel: {fileID: 1028604398}
-  playerController: {fileID: 1374596330}
-  professionListContainer: {fileID: 0}
-  skillGridContainer: {fileID: 0}
-  professionButtonPrefab: {fileID: 0}
-  skillButtonPrefab: {fileID: 0}
-  professionTitle: {fileID: 0}
 --- !u!4 &1511259799
 Transform:
   m_ObjectHideFlags: 0
@@ -2813,3 +2835,4 @@ SceneRoots:
   - {fileID: 1153834512}
   - {fileID: 917527559}
   - {fileID: 8159355585320204413}
+  - {fileID: 944566682}
